@@ -65,8 +65,17 @@ private long current_serial;
 private Record initialsoa;
 
 private int rtype;
+private int allRecordsSize = 0;
 
-public static class Delta {
+	public int getAllRecordsSize() {
+		return allRecordsSize;
+	}
+
+	public void setAllRecordsSize(int allRecordsSize) {
+		this.allRecordsSize = allRecordsSize;
+	}
+
+	public static class Delta {
 	/**
 	 * All changes between two versions of a zone in an IXFR response.
 	 */
@@ -527,6 +536,13 @@ doxfr() throws IOException, ZoneTransferException {
 	sendQuery();
 	while (state != END) {
 		byte [] in = client.recv();
+
+		/**
+		 * Finding total size of record in bytes
+		 */
+		if(in != null) {
+			allRecordsSize += in.length;
+		}
 		Message response =  parseMessage(in);
 		if (response.getHeader().getRcode() == Rcode.NOERROR &&
 		    verifier != null)
