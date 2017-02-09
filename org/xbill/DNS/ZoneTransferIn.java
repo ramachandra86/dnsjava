@@ -534,6 +534,7 @@ parseMessage(byte [] b) throws WireParseException {
 private void
 doxfr() throws IOException, ZoneTransferException {
 	sendQuery();
+	allRecordsSize = 0;
 	while (state != END) {
 		byte [] in = client.recv();
 
